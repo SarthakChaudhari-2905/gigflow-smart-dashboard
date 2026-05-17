@@ -26,21 +26,22 @@ const Login = () => {
 
     try {
       const res = await API.post("/auth/login", formData);
-          toast.success("Login successful");
+
+      toast.success("Login successful");
+
       login(res.data.user, res.data.token);
 
       navigate("/dashboard");
-   
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
+    <div className="min-h-screen flex justify-center items-center bg-gray-100 px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-lg w-96"
+        className="bg-white p-6 md:p-8 rounded-xl shadow-lg w-full max-w-md"
       >
         <h2 className="text-3xl font-bold mb-6 text-center">
           Login
@@ -50,7 +51,7 @@ const Login = () => {
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full border p-3 mb-4 rounded"
+          className="w-full border p-3 mb-4 rounded-lg outline-none"
           onChange={handleChange}
         />
 
@@ -58,18 +59,18 @@ const Login = () => {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full border p-3 mb-4 rounded"
+          className="w-full border p-3 mb-4 rounded-lg outline-none"
           onChange={handleChange}
         />
 
         <button
           type="submit"
-          className="w-full bg-black text-white p-3 rounded"
+          className="w-full bg-black text-white p-3 rounded-lg hover:bg-gray-800 transition"
         >
           Login
         </button>
 
-        <p className="mt-4 text-center">
+        <p className="mt-4 text-center text-sm md:text-base">
           Don't have an account?{" "}
           <Link
             to="/register"

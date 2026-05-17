@@ -67,7 +67,7 @@ const EditLeadModal = ({
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-8 rounded-xl w-[400px]"
+            className="bg-white p-6 md:p-8 rounded-xl w-full max-w-md mx-4"
           >
             <h2 className="text-2xl font-bold mb-5">
               Edit Lead

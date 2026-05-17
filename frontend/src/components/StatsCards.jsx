@@ -23,7 +23,7 @@ const StatsCards = ({ stats }) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-5 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
       {cards.map((card) => (
         <div
           key={card.title}
@@ -33,7 +33,7 @@ const StatsCards = ({ stats }) => {
             {card.title}
           </h3>
 
-          <p className="text-4xl font-bold">
+          <p className="text-3xl md:text-4xl font-bold">
             {card.value}
           </p>
         </div>

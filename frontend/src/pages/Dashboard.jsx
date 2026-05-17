@@ -13,9 +13,10 @@ const Dashboard = () => {
 
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
-const [search, setSearch] = useState("");
 
-const [status, setStatus] = useState("");
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+
   const [stats, setStats] = useState({
     totalLeads: 0,
     newLeads: 0,
@@ -24,26 +25,27 @@ const [status, setStatus] = useState("");
     lostLeads: 0,
   });
 
- const fetchLeads = async () => {
-  try {
-    setLoading(true);
+  const fetchLeads = async () => {
+    try {
+      setLoading(true);
 
-    const res = await API.get(
-      `/leads?search=${search}&status=${status}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+      const res = await API.get(
+        `/leads?search=${search}&status=${status}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    setLeads(res.data);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setLoading(false);
-  }
-};
+      setLeads(res.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchStats = async () => {
     try {
       const res = await API.get(
@@ -61,39 +63,41 @@ const [status, setStatus] = useState("");
     }
   };
 
-useEffect(() => {
-  fetchLeads();
-
-  fetchStats();
-}, [search, status]);
+  useEffect(() => {
+    fetchLeads();
+    fetchStats();
+  }, [search, status]);
 
   return (
-   <div className="flex bg-gray-50 min-h-screen">
+    <div className="flex flex-col md:flex-row bg-gray-50 min-h-screen">
       <Sidebar />
 
-      <div className="flex-1">
+      <div className="flex-1 overflow-x-hidden">
         <Navbar />
 
-        <div className="p-8">
+        <div className="p-4 md:p-8">
           <StatsCards stats={stats} />
+
           <SearchFilter
-  search={search}
-  setSearch={setSearch}
-  status={status}
-  setStatus={setStatus}
-/>
+            search={search}
+            setSearch={setSearch}
+            status={status}
+            setStatus={setStatus}
+          />
 
-         <AddLeadModal
-  fetchLeads={fetchLeads}
-  fetchStats={fetchStats}
-/>
+          <div className="mb-6">
+            <AddLeadModal
+              fetchLeads={fetchLeads}
+              fetchStats={fetchStats}
+            />
+          </div>
 
-<LeadTable
-  leads={leads}
-  fetchLeads={fetchLeads}
-  fetchStats={fetchStats}
-  loading={loading}
-/>
+          <LeadTable
+            leads={leads}
+            fetchLeads={fetchLeads}
+            fetchStats={fetchStats}
+            loading={loading}
+          />
         </div>
       </div>
     </div>

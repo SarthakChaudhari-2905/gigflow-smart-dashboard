@@ -13,7 +13,7 @@ const SearchFilter = ({
         onChange={(e) =>
           setSearch(e.target.value)
         }
-        className="border p-3 rounded-lg flex-1 bg-white"
+        className="border p-3 rounded-lg flex-1 bg-white outline-none"
       />
 
       <select
@@ -21,7 +21,7 @@ const SearchFilter = ({
         onChange={(e) =>
           setStatus(e.target.value)
         }
-        className="border p-3 rounded-lg bg-white"
+        className="border p-3 rounded-lg bg-white md:w-60 outline-none"
       >
         <option value="">All Status</option>
 

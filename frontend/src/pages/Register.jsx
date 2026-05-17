@@ -29,15 +29,15 @@ const Register = () => {
 
       navigate("/");
     } catch (error) {
-     toast.error(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
+    <div className="min-h-screen flex justify-center items-center bg-gray-100 px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-lg w-96"
+        className="bg-white p-6 md:p-8 rounded-xl shadow-lg w-full max-w-md"
       >
         <h2 className="text-3xl font-bold mb-6 text-center">
           Register
@@ -47,7 +47,7 @@ const Register = () => {
           type="text"
           name="name"
           placeholder="Name"
-          className="w-full border p-3 mb-4 rounded"
+          className="w-full border p-3 mb-4 rounded-lg outline-none"
           onChange={handleChange}
         />
 
@@ -55,7 +55,7 @@ const Register = () => {
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full border p-3 mb-4 rounded"
+          className="w-full border p-3 mb-4 rounded-lg outline-none"
           onChange={handleChange}
         />
 
@@ -63,23 +63,20 @@ const Register = () => {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full border p-3 mb-4 rounded"
+          className="w-full border p-3 mb-4 rounded-lg outline-none"
           onChange={handleChange}
         />
 
         <button
           type="submit"
-          className="w-full bg-black text-white p-3 rounded"
+          className="w-full bg-black text-white p-3 rounded-lg hover:bg-gray-800 transition"
         >
           Register
         </button>
 
-        <p className="mt-4 text-center">
+        <p className="mt-4 text-center text-sm md:text-base">
           Already have an account?{" "}
-          <Link
-            to="/"
-            className="text-blue-500"
-          >
+          <Link to="/" className="text-blue-500">
             Login
           </Link>
         </p>

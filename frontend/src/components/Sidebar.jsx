@@ -14,28 +14,34 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-black text-white min-h-screen p-5">
-      <h1 className="text-3xl font-bold mb-10">
+    <div className="w-full md:w-64 bg-black text-white p-5 md:min-h-screen">
+      <h1 className="text-3xl font-bold mb-8 text-center md:text-left">
         GigFlow
       </h1>
 
-      <ul className="space-y-6">
-        <li className="flex items-center gap-3 cursor-pointer">
+      <ul className="flex flex-row md:flex-col justify-around md:justify-start gap-6">
+        <li className="flex items-center gap-2 md:gap-3 cursor-pointer">
           <LayoutDashboard size={20} />
-          Dashboard
+          <span className="hidden sm:block">
+            Dashboard
+          </span>
         </li>
 
-        <li className="flex items-center gap-3 cursor-pointer">
+        <li className="flex items-center gap-2 md:gap-3 cursor-pointer">
           <Users size={20} />
-          Leads
+          <span className="hidden sm:block">
+            Leads
+          </span>
         </li>
 
         <li
           onClick={handleLogout}
-          className="flex items-center gap-3 cursor-pointer text-red-400"
+          className="flex items-center gap-2 md:gap-3 cursor-pointer text-red-400"
         >
           <LogOut size={20} />
-          Logout
+          <span className="hidden sm:block">
+            Logout
+          </span>
         </li>
       </ul>
     </div>
