@@ -3,6 +3,8 @@ const Lead = require("../models/Lead");
 // CREATE LEAD
 const createLead = async (req, res) => {
   try {
+    console.log("CREATE LEAD USER:", req.user);
+
     const { name, email, company, status, notes } = req.body;
 
     const lead = await Lead.create({
@@ -16,6 +18,8 @@ const createLead = async (req, res) => {
 
     res.status(201).json(lead);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });
@@ -25,12 +29,17 @@ const createLead = async (req, res) => {
 // GET ALL LEADS
 const getLeads = async (req, res) => {
   try {
+    console.log("LOGGED IN USER ID:", req.user._id);
+    console.log("LOGGED IN USER EMAIL:", req.user.email);
+
     const search = req.query.search || "";
     const status = req.query.status || "";
 
-    let query = {};
+    let query = {
+      assignedTo: req.user._id,
+    };
 
-    // Search filter
+    // SEARCH FILTER
     if (search) {
       query.$or = [
         {
@@ -45,17 +54,23 @@ const getLeads = async (req, res) => {
       ];
     }
 
-    // Status filter
+    // STATUS FILTER
     if (status) {
       query.status = status;
     }
+
+    console.log("FINAL QUERY:", query);
 
     const leads = await Lead.find(query)
       .populate("assignedTo", "name email")
       .sort({ createdAt: -1 });
 
+    console.log("FOUND LEADS:", leads);
+
     res.status(200).json(leads);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });
@@ -65,10 +80,10 @@ const getLeads = async (req, res) => {
 // GET SINGLE LEAD
 const getLeadById = async (req, res) => {
   try {
-    const lead = await Lead.findById(req.params.id).populate(
-      "assignedTo",
-      "name email"
-    );
+    const lead = await Lead.findOne({
+      _id: req.params.id,
+      assignedTo: req.user._id,
+    }).populate("assignedTo", "name email");
 
     if (!lead) {
       return res.status(404).json({
@@ -78,6 +93,8 @@ const getLeadById = async (req, res) => {
 
     res.status(200).json(lead);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });
@@ -87,24 +104,27 @@ const getLeadById = async (req, res) => {
 // UPDATE LEAD
 const updateLead = async (req, res) => {
   try {
-    const lead = await Lead.findById(req.params.id);
-
-    if (!lead) {
-      return res.status(404).json({
-        message: "Lead not found",
-      });
-    }
-
-    const updatedLead = await Lead.findByIdAndUpdate(
-      req.params.id,
+    const updatedLead = await Lead.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        assignedTo: req.user._id,
+      },
       req.body,
       {
         new: true,
       }
     );
 
+    if (!updatedLead) {
+      return res.status(404).json({
+        message: "Lead not found",
+      });
+    }
+
     res.status(200).json(updatedLead);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });
@@ -114,43 +134,54 @@ const updateLead = async (req, res) => {
 // DELETE LEAD
 const deleteLead = async (req, res) => {
   try {
-    const lead = await Lead.findById(req.params.id);
+    const deletedLead = await Lead.findOneAndDelete({
+      _id: req.params.id,
+      assignedTo: req.user._id,
+    });
 
-    if (!lead) {
+    if (!deletedLead) {
       return res.status(404).json({
         message: "Lead not found",
       });
     }
 
-    await lead.deleteOne();
-
     res.status(200).json({
       message: "Lead deleted successfully",
     });
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });
   }
 };
+
+// DASHBOARD STATS
 const getLeadStats = async (req, res) => {
   try {
-    const totalLeads = await Lead.countDocuments();
+    const totalLeads = await Lead.countDocuments({
+      assignedTo: req.user._id,
+    });
 
     const newLeads = await Lead.countDocuments({
       status: "New",
+      assignedTo: req.user._id,
     });
 
     const contactedLeads = await Lead.countDocuments({
       status: "Contacted",
+      assignedTo: req.user._id,
     });
 
     const convertedLeads = await Lead.countDocuments({
       status: "Converted",
+      assignedTo: req.user._id,
     });
 
     const lostLeads = await Lead.countDocuments({
       status: "Lost",
+      assignedTo: req.user._id,
     });
 
     res.status(200).json({
@@ -161,6 +192,8 @@ const getLeadStats = async (req, res) => {
       lostLeads,
     });
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });
